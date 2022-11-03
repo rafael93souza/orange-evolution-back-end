@@ -5,7 +5,7 @@ const create = async (req, res) => {
     const user = await UserService.create(req.body);
     return res.status(201).json(user);
   } catch (error) {
-    return res.status(409).json({ message: error.message });
+    return res.status(error.status).json({ message: error.message });
   }
 };
 
