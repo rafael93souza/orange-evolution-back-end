@@ -1,9 +1,9 @@
-const express = require("express");
-const { controllerTest } = require("../controllers/controllersTest");
-const { middlewaresTest } = require("../middlewares/middlewaresTest");
-const router = express();
+const express = require('express');
+const UseController = require('../controllers/User.controllers');
+const { middlewaresTest } = require('../middlewares/middlewaresTest');
+const router = express.Router();
 
-
-router.get("/user", middlewaresTest, controllerTest);
+router.post('/users', middlewaresTest, UseController.create);
+router.get('/users', middlewaresTest, UseController.findAll);
 
 module.exports = router;
