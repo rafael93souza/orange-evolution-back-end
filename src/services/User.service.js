@@ -1,5 +1,7 @@
 const knex = require('../connections/database');
+const bcrypt = require('bcrypt');
 const errors = require('../utils/errorsBase');
+
 const create = async (data) => {
   const userExists = await knex('users').where('email', data.email);
 
@@ -7,7 +9,9 @@ const create = async (data) => {
     throw errors(409, 'Usuário já cadastrado!');
   }
 
-  const user = await knex('users').insert(data).returning(['id', 'name', 'email']);
+  const passwrdIncrypted = await bcrypt.hash(data.password, 10);
+  const userData = { ...data, password: passwrdIncrypted };
+  const user = await knex('users').insert(userData).returning(['id', 'name', 'email']);
 
   return { success: user };
 };
