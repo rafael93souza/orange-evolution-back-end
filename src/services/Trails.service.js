@@ -6,15 +6,13 @@ const create = async (data) => {
     if (trailExists) {
         throw errors(409, 'Trilha já cadastrada no sistema!');
     }
-
     const createdTrail = await knex('cursos').insert(data).returning('*');
 
-    return { success: createdTrail };
+    return createdTrail;
 };
 
 const findAll = async () => {
     const trails = await knex('cursos');
-    console.log(trails)
     return trails;
 };
 
