@@ -1,6 +1,6 @@
 const joi = require("joi");
 const schemaRegisterUser = joi.object({
-    name: joi.string().required().trim().messages({
+    nome: joi.string().required().trim().messages({
         'any.required': "O campo nome é obrigatótio",
         'string.empty': "O campo nome é obrigatótio"
     }),
@@ -9,7 +9,7 @@ const schemaRegisterUser = joi.object({
         'string.empty': "O campo email é obrigatótio",
         'string.email': "O email deve ser um email valido"
     }),
-    password: joi.string().min(6).required().trim().messages({
+    senha: joi.string().min(6).required().trim().messages({
         'any.required': "O campo senha é obrigatótio",
         'string.empty': "O campo senha é obrigatótio",
         "string.min": "O campo senha deve conter no minimo 6 caracteres"

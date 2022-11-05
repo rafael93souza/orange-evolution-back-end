@@ -4,7 +4,7 @@ const schemaLoginUser = joi.object({
         'any.required': "O campo email é obrigatótio",
         'string.empty': "O campo email é obrigatótio"
     }),
-    password: joi.string().required().trim().messages({
+    senha: joi.string().required().trim().messages({
         'any.required': "O campo senha é obrigatótio",
         'string.empty': "O campo senha é obrigatótio"
     })
