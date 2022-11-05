@@ -4,14 +4,14 @@ const { generationToken } = require('../auth/auth');
 const errors = require('../utils/errorsBase');
 
 const signIn = async (data) => {
-  const { email, password } = data;
-  const user = await knex('users').where('email', email).first();
+  const { email, senha } = data;
+  const user = await knex('usuarios').where('email', email).first();
 
   if (!user) {
     throw errors(403, 'E-mail ou senha incorretos!');
   }
 
-  const encrypted = await bcrypt.compare(password, user.password);
+  const encrypted = await bcrypt.compare(senha, user.senha);
   if (!encrypted) {
     throw errors(403, 'E-mail ou senha incorretos!');
   }
