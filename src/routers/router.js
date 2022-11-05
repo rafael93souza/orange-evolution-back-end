@@ -15,6 +15,7 @@ const schemaRegisterClasses = require('../schemas/schemaRegisterClasses');
 const schemaRegisterAdmin = require('../schemas/schemaRegisterAdmin');
 const { authMiddlewareAdmin } = require('../middlewares/auth.middlewareAdmin');
 const schemaLoginAdmin = require('../schemas/schemaLoginAdmin');
+const schemaRegisterStatusClasses = require('../schemas/schemaRegisterStatusClasses');
 const router = express.Router();
 
 router.post('/users', validationSchema(schemaRegisterUser), UseController.create);
@@ -26,6 +27,8 @@ router.get('/user', UseController.detailUser);
 router.get('/trails', TrailsController.findAll);
 router.get('/classes/:curso_id', ClassesController.detailClasses);
 router.get("/status/:usuario_id", StatusClassesController.detailStatusClasses);
+router.post("/status/:usuario_id",
+    validationSchema(schemaRegisterStatusClasses), StatusClassesController.create);
 
 
 router.use(authMiddlewareAdmin);

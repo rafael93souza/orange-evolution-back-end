@@ -12,6 +12,18 @@ const create = async (usuario_id, data, userLogged) => {
     if (userExists.id !== userLogged) {
         throw errors(409, 'código do aluno inválido');
     }
+    const trailExists = await knex('cursos').where({ id: data.curso_id }).first();
+    if (!trailExists) {
+        throw errors(409, 'Curso não cadastrado no sistema!');
+    }
+    const classesExists = await knex('todos_cursos').where({
+        id: data.aula_id,
+        curso_id: data.curso_id
+    }).first();
+
+    if (!classesExists) {
+        throw errors(409, 'Aula não cadastrada no sistema!');
+    }
     const statusExists = await knex('status')
         .where({ usuario_id })
         .andWhere({ curso_id: data.curso_id })
