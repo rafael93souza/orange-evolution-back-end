@@ -14,7 +14,7 @@ const create = async (data) => {
 };
 
 const findAll = async () => {
-    const administrators = await knex('administrador');
+    const administrators = await knex('administrador').select(['id', 'nome', 'email']);
     return administrators;
 };
 

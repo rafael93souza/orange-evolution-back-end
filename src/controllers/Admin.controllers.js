@@ -11,8 +11,13 @@ const create = async (req, res) => {
 };
 
 const findAll = async (req, res) => {
-    const administrators = await AdminService.findAll();
-    return res.status(200).json(administrators);
+    try {
+        const administrators = await AdminService.findAll();
+        return res.status(200).json(administrators);
+    } catch (error) {
+        return error.status ? res.status(error.status).json({ message: error.message })
+            : res.status(500).json({ message: error.message });
+    }
 };
 
 module.exports = { create, findAll };

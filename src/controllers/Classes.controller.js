@@ -15,7 +15,8 @@ const findAll = async (req, res) => {
         const classesAll = await ClassesService.findAll();
         return res.status(200).json(classesAll);
     } catch (error) {
-        return res.status(error.status).json({ message: error.message });
+        return error.status ? res.status(error.status).json({ message: error.message })
+            : res.status(500).json({ message: error.message });
     }
 };
 
@@ -25,7 +26,8 @@ const detailClasses = async (req, res) => {
         const classes = await ClassesService.detailClasses(curso_id);
         return res.status(200).json(classes);
     } catch (error) {
-        return res.status(error.status).json({ message: error.message });
+        return error.status ? res.status(error.status).json({ message: error.message })
+            : res.status(500).json({ message: error.message });
     }
 };
 

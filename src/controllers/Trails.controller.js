@@ -6,7 +6,8 @@ const create = async (req, res) => {
         console.log(trail)
         return res.status(201).json(trail);
     } catch (error) {
-        return res.status(error.status).json({ message: error.message });
+        return error.status ? res.status(error.status).json({ message: error.message })
+            : res.status(500).json({ message: error.message });
     }
 };
 
@@ -15,7 +16,8 @@ const findAll = async (req, res) => {
         const trail = await TrailsService.findAll();
         return res.status(200).json(trail);
     } catch (error) {
-        return res.status(error.status).json({ message: error.message });
+        return error.status ? res.status(error.status).json({ message: error.message })
+            : res.status(500).json({ message: error.message });
     }
 
 };
