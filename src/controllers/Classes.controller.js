@@ -1,9 +1,9 @@
 const ClassesService = require('../services/Classes.service');
 
 const create = async (req, res) => {
-    const { id } = req.params;
+    const { curso_id } = req.params;
     try {
-        const classes = await ClassesService.create(id, req.body);
+        const classes = await ClassesService.create(curso_id, req.body);
         return res.status(201).json(classes);
     } catch (error) {
         return res.status(error.status).json({ message: error.message });

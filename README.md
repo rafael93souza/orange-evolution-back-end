@@ -14,19 +14,23 @@ Construida uma RESTful API que permite:
 - Fazer Login na plataforma
 - Listar todos os cursos oferecidos na plataforma
 - Listar todas as aulas de um curso cadastrado na plataforma
+- Fazer checkout em uma aula de um curso especifico
 - [Extra] Editar perfil do usuário logado na plataforma
 
-###Admnistrador:
+###Administrador:
+- Cadastrar novos administradores na plataforma
 - Cadastrar novos cursos na plataforma
 - Cadastrar novas aulas para um curso na plataforma
 - Editar uma aula cadastrada na plataforma
 - Excluir uma aula cadastrada na plataforma
-- [Extra] Filtrar transações por categoria 
+- Listar todos alunos cadastrados na plataforma
+- Listar todas as aulas cadastradas na plataforma
+
 
 
 ## **Banco de dados**
 
-Criar um Banco de Dados PostgreSQL onde o dump do banco de dados encontra-se na raiz do projeto, onde o mesmo contendo as seguintes tabelas e colunas:
+Criado um Banco de Dados PostgreSQL onde o dump do banco de dados encontra-se na raiz do projeto, o mesmo contém as seguintes tabelas e colunas:
 
 - usuarios
   - id
@@ -34,7 +38,7 @@ Criar um Banco de Dados PostgreSQL onde o dump do banco de dados encontra-se na 
   - email (campo único)
   - senha (senha Criptografada)
 <br>
-- Admnistrador
+- Administrador
   - id
   - nome
   - email (campo único)
@@ -253,8 +257,119 @@ Essa é a rota que será chamada quando o usuário quiser buscar pelas aulas cad
     "message": "Curso não cadastrado no sistema"
 }
 ```
+---
+### **Checkout em um status de uma Aulas do Curso**
+
+#### `POST` `/status/:usuario_id`
+
+Essa é a rota que será chamada quando o usuário quiser fazer checkuout no status (mudar status) de uma aula do curso.  
+
+- **Requisição**  
+    Com parâmetro de rota que deve conter o id do usuário especifico que deseja fazer o checkout (o id deverá ser o mesmo do usuário que está logado na aplicação.).  
+   
+   O corpo (body) deverá possuir um objeto com as seguintes propriedades (respeitando estes nomes):
+
+  - status
+  - curso_id
+  - aula_id
+
+#### **Exemplo de requisição**
+
+```javascript
+// POST /status/1
+{
+    "status": "concluido",
+    "curso_id": 4,
+    "aula_id":1
+}
+```
+#### **Exemplos de resposta**
+
+```javascript
+// HTTP Status 201
+[
+	{
+		"id": 1,
+		"titulo": "Migração de Carreira",
+		"tipo": "Artigo",
+		"criador": "Orange Juice",
+		"duracao": null,
+		"url": "https://medium.com/orangejuicefc/guia-definitivo-de-como-migrar-para-ux-design-5-passos-para-virar-um-ux-1675f71796b4",
+		"curso_id": 4,
+		"status": "Não iniciado"
+	},
+	{
+		"id": 2,
+		"titulo": "Migração de Carreira",
+		"tipo": "Artigo",
+		"criador": "Orange Juice",
+		"duracao": null,
+		"url": "https://medium.com/orangejuicefc/design-thinking-e-carreira-como-migrei-de-psicologia-para-ux-design-cb79e8b47df5",
+		"curso_id": 4,
+		"status": "Não iniciado"
+	}
+[
+```
+
+```javascript
+// HTTP Status 400
+{
+    "message": "Curso não cadastrado no sistema"
+}
+```
+
+<br>
+
+---
+
+### **ATENÇÃO**: Todas os endpoints a seguir, exigem o token de autenticação do ADMINISTRADOR logado, recebendo no header da requisição.
+
+---
 
 ## **Endpoints - Admnistradores**
+---
+
+### **Cadastrar um novo administrador**
+#### `POST` `/admin`
+
+Essa é a rota que será utilizada para cadastrar um novo administrador na plataforma.
+(apena um administrador logado poderá cadastrar outro administrador)
+- **Requisição**   
+    O corpo (body) deverá possuir um objeto com as seguintes propriedades (respeitando estes nomes):
+  - nome (nome do admin - obrigatório)
+  - email (campo unico obrigratório)
+  - senha (campo obrigatório)
+
+#### **Exemplo de requisição**
+
+```javascript
+// POST /trails
+{
+    "nome":"rafael souza",
+    "email": "rafaelsouzaadmin@email.com",
+    "senha":"orangeJuiceAdm"
+}
+```
+
+#### **Exemplos de resposta**
+
+```javascript
+// HTTP Status 201
+[
+	{
+		"id": 2,
+		"nome": "Rafael Souza",
+		"email": "rafaelsouzaadmin@email.com"
+	}
+]
+```
+
+```javascript
+// HTTP Status 409
+{
+	"message": "E-mail já cadastrado no sistema!"
+}
+```
 ---
 ### **Cadastrar um curso**
 #### `POST` `/trails`
@@ -295,11 +410,12 @@ Essa é a rota que será utilizada para cadastrar um novo curso na plataforma.
 
 ### **Cadastrar uma nova Aula no sistema**
 
-#### `POST` `/classes/:id`
+#### `POST` `/classes/:curso_id`
 
 Essa é a rota que permite o admnistrador cadastre uma nova aula para um curso especifico do sistema.
 
 - **Requisição**  
+    Com parâmetro de rota que deve conter o id do curso especifico que o administrador deseja fazer o checkout (o id deverá ser o mesmo do usuário que está logado na aplicação) cadastro da aula.
     O corpo (body) deverá possuir um objeto com as seguintes propriedades (respeitando estes nomes):
 
   - titulo* 
@@ -307,7 +423,7 @@ Essa é a rota que permite o admnistrador cadastre uma nova aula para um curso e
   - criador* (quem produziu o conteúdo Obrigatório)
   - duracao
 
-(*) Requisitos Obrigatórios, além disso o id do curso em que se deseja cadastrar o curso deverá ser enviado pelo parâmetro de rota
+(*) Requisitos Obrigatórios
 
 #### **Exemplo de requisição**
 
@@ -396,7 +512,7 @@ Essa é a rota que será chamada quando o admnistrador quiser obter todos os cur
 ---
 ### **Detalhar Aulas de um Curso**
 
-#### `GET` `/classes/:id`
+#### `GET` `/classes/:curso_id`
 
 Essa é a rota que será chamada quando o administrador quiser buscar pelas aulas cadastradas de um curso especifico.  
 
@@ -459,7 +575,7 @@ Essa é a rota que será chamada quando o admnistrador quiser listar todas as as
 #### **Exemplo de requisição**
 
 ```javascript
-// GET /categoria
+// GET /classes
 // Sem conteúdo no corpo (body) da requisição
 ```
 
@@ -498,5 +614,146 @@ Essa é a rota que será chamada quando o admnistrador quiser listar todas as as
 
 ---
 
+### **Listar todos os administradores cadastradas**
+
+#### `GET` `/admin`
+
+Essa é a rota que será chamada quando o admnistrador quiser listar todos os administradores cadastrados no sistema.
+
+- **Requisição**  
+    Sem parâmetros de rota ou de query.  
+    Não deverá possuir conteúdo no corpo (body) da requisição.
+
+#### **Exemplo de requisição**
+
+```javascript
+// GET /admin
+// Sem conteúdo no corpo (body) da requisição
+```
+
+#### **Exemplos de resposta**
+
+```javascript
+// HTTP Status 200 
+[
+	{
+		"id": 1,
+		"nome": "Rafael Souza",
+		"email": "rafaelsouza@email.com"
+	},
+	{
+		"id": 2,
+		"nome": "Rafael Souza",
+		"email": "rafaelsouzaadmin@email.com"
+	}
+]
+```
+
+```javascript
+// HTTP Status 200 / 201 / 204
+{
+	"message": "administrador não autorizado"
+}
+```
+
+---
+
+### **Listar todos os alunos cadastrados no sistema**
+
+#### `GET` `/users`
+
+Essa é a rota que será chamada quando o admnistrador quiser listar todos os alunos cadastrados no sistema.
+
+- **Requisição**  
+    Sem parâmetros de rota ou de query.  
+    Não deverá possuir conteúdo no corpo (body) da requisição.
+
+#### **Exemplo de requisição**
+
+```javascript
+// GET /users
+// Sem conteúdo no corpo (body) da requisição
+```
+
+#### **Exemplos de resposta**
+
+```javascript
+// HTTP Status 200 
+[
+   { 
+	"id": 1,
+	"nome": "Rafael Souza",
+	"email": "rafaelsouza@email.com"
+   },
+   {
+	"id": 2,
+	"nome": "Joana Angelica",
+	"email": "joanaangelica@email.com"
+   }, 
+
+   {
+       "id":3,
+       "nome":"Emersom Moreira",
+       "email":"emersommoreira@email.com"
+    }
+]
+```
+
+```javascript
+// HTTP Status 200 / 201 / 204
+{
+	"message": "administrador não autorizado"
+}
+```
+
+### **Listar todos os status de aulas cadastradas**
+
+#### `GET` `/status`
+
+Essa é a rota que será chamada quando o admnistrador quiser listar todos os statos de aulas cadastrados no sistema.
+
+- **Requisição**  
+    Sem parâmetros de rota ou de query.  
+    Não deverá possuir conteúdo no corpo (body) da requisição.
+
+#### **Exemplo de requisição**
+
+```javascript
+// GET /status
+// Sem conteúdo no corpo (body) da requisição
+```
+
+
+#### **Exemplos de resposta**
+
+```javascript
+// HTTP Status 200 
+[
+	{
+		"id": 4,
+		"status": "iniciado",
+		"usuario_id": 1,
+		"curso_id": 1,
+		"aula_id": 7
+	},
+	{
+		"id": 5,
+		"status": "concluido",
+		"usuario_id": 1,
+		"curso_id": 4,
+		"aula_id": 1
+	}
+]
+```
+
+```javascript
+// HTTP Status 200 / 201 / 204
+{
+	"message": "administrador não autorizado"
+}
+```
+
+---
+---
 **API AINDA EM DESENVOLVIMENTO**: Etaremos atualizando o README!!!
 

@@ -40,6 +40,6 @@ router.post('/admin', validationSchema(schemaRegisterAdmin), AdminController.cre
 
 router.post('/trails', validationSchema(schemaRegisterTrails), TrailsController.create);
 
-router.post('/classes/:id', validationSchema(schemaRegisterClasses), ClassesController.create);
+router.post('/classes/:curso_id', validationSchema(schemaRegisterClasses), ClassesController.create);
 router.get("/status", StatusClassesController.findAll)
 module.exports = router;
