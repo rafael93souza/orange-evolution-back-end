@@ -1,9 +1,10 @@
-const UserService = require('../services/User.service');
+const TrailsService = require('../services/Trails.service');
 
 const create = async (req, res) => {
     try {
-        const user = await UserService.create(req.body);
-        return res.status(201).json(user);
+        const trail = await TrailsService.create(req.body);
+        console.log(trail)
+        return res.status(201).json(trail);
     } catch (error) {
         return error.status ? res.status(error.status).json({ message: error.message })
             : res.status(500).json({ message: error.message });
@@ -12,12 +13,13 @@ const create = async (req, res) => {
 
 const findAll = async (req, res) => {
     try {
-        const users = await UserService.findAll();
-        return res.status(200).json(users);
+        const trail = await TrailsService.findAll();
+        return res.status(200).json(trail);
     } catch (error) {
         return error.status ? res.status(error.status).json({ message: error.message })
             : res.status(500).json({ message: error.message });
     }
+
 };
 
 module.exports = { create, findAll };
