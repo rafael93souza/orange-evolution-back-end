@@ -1,5 +1,6 @@
 CREATE DATABASE orange_evolution;
 
+
 CREATE TABLE
     usuarios (
         id SERIAL PRIMARY KEY,
