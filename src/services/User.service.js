@@ -11,11 +11,13 @@ const create = async (data) => {
     const passwrdIncrypted = await bcrypt.hash(data.senha, 10);
     const userData = { ...data, senha: passwrdIncrypted };
     const user = await knex('usuarios').insert(userData).returning(['id', 'nome', 'email']);
-    return user;
+
+    return { success: user };
 };
 
 const findAll = async () => {
-    const users = await knex('usuarios').select(['id', 'nome', 'email']);
+    const users = await knex('usuarios').select('id', 'nome', 'email');
+
     return users;
 };
 const detailUser = async (id) => {

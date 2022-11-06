@@ -1,18 +1,18 @@
-const joi = require("joi");
+const joi = require('joi');
 const schemaRegisterUser = joi.object({
     nome: joi.string().required().trim().messages({
-        'any.required': "O campo nome é obrigatótio",
-        'string.empty': "O campo nome é obrigatótio"
+        'any.required': 'O campo nome é obrigatótio',
+        'string.empty': 'O campo nome é obrigatótio',
     }),
     email: joi.string().email().required().trim().messages({
-        'any.required': "O campo email é obrigatótio",
-        'string.empty': "O campo email é obrigatótio",
-        'string.email': "O email deve ser um email valido"
+        'any.required': 'O campo email é obrigatótio',
+        'string.empty': 'O campo email é obrigatótio',
+        'string.email': 'O email deve ser um email valido',
     }),
     senha: joi.string().min(6).required().trim().messages({
-        'any.required': "O campo senha é obrigatótio",
-        'string.empty': "O campo senha é obrigatótio",
-        "string.min": "O campo senha deve conter no minimo 6 caracteres"
-    })
+        'any.required': 'O campo senha é obrigatótio',
+        'string.empty': 'O campo senha é obrigatótio',
+        'string.min': 'O campo senha deve conter no minimo 6 caracteres',
+    }),
 });
 module.exports = schemaRegisterUser;
