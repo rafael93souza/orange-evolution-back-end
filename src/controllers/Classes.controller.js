@@ -13,7 +13,7 @@ const findAll = async (req, res) => {
 
 const detailClasses = async (req, res) => {
     const { curso_id } = req.params;
-    const classes = await ClassesService.detailClasses(curso_id);
+    const classes = await ClassesService.detailClasses(req.user.sub, curso_id);
     return res.status(200).json(classes);
 };
 

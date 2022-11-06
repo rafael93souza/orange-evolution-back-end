@@ -26,7 +26,7 @@ const create = async (id, data) => {
     return createdClasses;
 };
 
-const detailClasses = async (curso_id) => {
+const detailClasses = async (id, curso_id) => {
     if (!Number(curso_id)) {
         throw errors(400, 'Informe um código da trilha válido');
     }
@@ -35,6 +35,15 @@ const detailClasses = async (curso_id) => {
         throw errors(409, 'Trilha não cadastrada no sistema!');
     }
     const classesDetails = await knex('todos_cursos').where({ curso_id });
+    const statusClasses = await knex("status").where({ curso_id }).andWhere({ usuario_id: id });
+
+    statusClasses.map(status => {
+        const classe = classesDetails.find(classe => {
+            return classe.id === status.aula_id
+        })
+        classe.status = status.status
+    });
+
     const classes = classesDetails.map(classe => {
         return { ...classe, nome_curso: trail.nome }
     })
