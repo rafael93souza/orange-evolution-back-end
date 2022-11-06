@@ -14,11 +14,8 @@ const signIn = async (data) => {
     if (!encrypted) {
         throw errors(403, 'E-mail ou senha incorretos!');
     }
-
     const payload = { id: user.id, nome: user.nome, email: user.email };
-    console.log(payload)
     token = generationToken(payload);
-
     return { token };
 };
 

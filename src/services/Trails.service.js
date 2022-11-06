@@ -7,7 +7,6 @@ const create = async (data) => {
         throw errors(409, 'Trilha já cadastrada no sistema!');
     }
     const createdTrail = await knex('cursos').insert(data).returning('*');
-
     return createdTrail;
 };
 

@@ -1,6 +1,7 @@
 const knex = require('../connections/database');
 const bcrypt = require('bcrypt');
 const errors = require('../utils/errorsBase');
+const { generationToken } = require('../auth/auth');
 
 const create = async (data) => {
     const userExists = await knex('usuarios').where('email', data.email);
@@ -12,16 +13,16 @@ const create = async (data) => {
     const userData = { ...data, senha: passwrdIncrypted };
     const user = await knex('usuarios').insert(userData).returning(['id', 'nome', 'email']);
 
-    return { success: user };
+    const payload = { id: user[0].id, nome: user[0].nome, email: user[0].email };
+    token = generationToken(payload);
+    return { user: user[0], token };
 };
 
 const findAll = async () => {
     const users = await knex('usuarios').select('id', 'nome', 'email');
-
     return users;
 };
 const detailUser = async (id) => {
-    console.log(id)
     const users = await knex('usuarios').select(['id', 'nome', 'email']).where({ id });
     return users;
 };
