@@ -3,7 +3,7 @@ const jtw = require('jsonwebtoken');
 const generationToken = (data) => {
     const config = { algorithm: 'HS256', expiresIn: '2d' };
 
-    const payload = { sub: data.id, name: data.nome, email: data.email };
+    const payload = { sub: data.id, nome: data.nome, email: data.email };
 
     const token = jtw.sign({ payload }, process.env.SECRET_KEY, config);
 
