@@ -55,8 +55,30 @@ const findAll = async () => {
     return classesAll;
 };
 
+const remove = async (curso_id, aula_id) => {
+    if (!Number(curso_id) || !Number(aula_id)) {
+        throw errors(400, 'Informe o código da trilha e da aula válido');
+    }
+    const classesExists = await knex('todos_cursos')
+        .where({ id: aula_id })
+        .andWhere(({ curso_id }))
+        .first();
+
+    if (!classesExists) {
+        throw errors(409, 'Aula não encontrada no sistema!');
+    }
+    await knex("status").where({ aula_id }).andWhere({ curso_id }).del()
+    await knex('todos_cursos')
+        .where({ id: aula_id })
+        .andWhere({ curso_id })
+        .del()
+    return true
+};
+
 module.exports = {
     create,
     findAll,
-    detailClasses
+    detailClasses,
+    remove,
+
 };
