@@ -2,6 +2,7 @@ const express = require('express');
 const UseController = require('../controllers/User.controllers');
 const LoginController = require('../controllers/Login.controller');
 const LoginAdminController = require('../controllers/LoginAdmin.controller');
+const StatusClassesController = require('../controllers/StatusClasses.controller');
 const TrailsController = require('../controllers/Trails.controller');
 const AdminController = require('../controllers/Admin.controllers');
 const ClassesController = require('../controllers/Classes.controller');
@@ -14,23 +15,31 @@ const schemaRegisterClasses = require('../schemas/schemaRegisterClasses');
 const schemaRegisterAdmin = require('../schemas/schemaRegisterAdmin');
 const { authMiddlewareAdmin } = require('../middlewares/auth.middlewareAdmin');
 const schemaLoginAdmin = require('../schemas/schemaLoginAdmin');
+const schemaRegisterStatusClasses = require('../schemas/schemaRegisterStatusClasses');
 const router = express.Router();
 
 router.post('/users', validationSchema(schemaRegisterUser), UseController.create);
 router.post('/login/admin', validationSchema(schemaLoginAdmin), LoginAdminController.signIn);
-router.get('/users', authMiddleware, UseController.findAll);
 router.post('/login', validationSchema(schemaLoginUser), LoginController.signIn);
 
-
-router.post('/trails', validationSchema(schemaRegisterTrails), TrailsController.create);
+router.use(authMiddleware)
+router.get('/user', UseController.detailUser);
 router.get('/trails', TrailsController.findAll);
-
-router.get('/classes', ClassesController.findAll);
 router.get('/classes/:curso_id', ClassesController.detailClasses);
+router.get("/status/:usuario_id", StatusClassesController.detailStatusClasses);
+router.post("/status/:usuario_id",
+    validationSchema(schemaRegisterStatusClasses), StatusClassesController.create);
+
 
 router.use(authMiddlewareAdmin);
+router.get('/users', UseController.findAll);
+router.get('/classes', ClassesController.findAll);
+
 router.get('/admin', AdminController.findAll);
 router.post('/admin', validationSchema(schemaRegisterAdmin), AdminController.create);
-router.post('/classes/:id', validationSchema(schemaRegisterClasses), ClassesController.create);
 
+router.post('/trails', validationSchema(schemaRegisterTrails), TrailsController.create);
+
+router.post('/classes/:curso_id', validationSchema(schemaRegisterClasses), ClassesController.create);
+router.get("/status", StatusClassesController.findAll)
 module.exports = router;
