@@ -42,5 +42,6 @@ router.post('/trails', validationSchema(schemaRegisterTrails), TrailsController.
 
 router.delete('/classes/:curso_id/:aula_id', ClassesController.remove);
 router.post('/classes/:curso_id', validationSchema(schemaRegisterClasses), ClassesController.create);
+router.put('/classes/:curso_id/:aula_id', validationSchema(schemaRegisterClasses), ClassesController.update);
 router.get("/status", StatusClassesController.findAll)
 module.exports = router;

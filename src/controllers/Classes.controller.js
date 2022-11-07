@@ -23,4 +23,10 @@ const remove = async (req, res) => {
     return res.status(204).send();
 };
 
-module.exports = { create, findAll, detailClasses, remove };
+const update = async (req, res) => {
+    const { curso_id, aula_id } = req.params;
+    const classes = await ClassesService.update(curso_id, aula_id, req.body);
+    return res.status(200).json(classes);
+};
+
+module.exports = { create, findAll, detailClasses, remove, update };
