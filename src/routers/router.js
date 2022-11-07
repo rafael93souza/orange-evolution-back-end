@@ -39,6 +39,7 @@ router.get('/admin', AdminController.findAll);
 router.post('/admin', validationSchema(schemaRegisterAdmin), AdminController.create);
 
 router.post('/trails', validationSchema(schemaRegisterTrails), TrailsController.create);
+router.put('/trails/:curso_id', validationSchema(schemaRegisterTrails), TrailsController.update);
 
 router.delete('/classes/:curso_id/:aula_id', ClassesController.remove);
 router.post('/classes/:curso_id', validationSchema(schemaRegisterClasses), ClassesController.create);

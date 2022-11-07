@@ -10,4 +10,10 @@ const findAll = async (req_, res) => {
     return res.status(200).json(trail);
 };
 
-module.exports = { create, findAll };
+const update = async (req, res) => {
+    const { curso_id } = req.params
+    const trail = await TrailsService.update(curso_id, req.body);
+    return res.status(200).json(trail);
+};
+
+module.exports = { create, findAll, update };

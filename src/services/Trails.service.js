@@ -15,7 +15,25 @@ const findAll = async () => {
     return trails;
 };
 
+
+const update = async (curso_id, data) => {
+    if (!Number(curso_id)) throw errors(400, 'Informe o código da trilha válido');
+
+    const trailExists = await knex('cursos').where('id', curso_id).first();
+    if (!trailExists) throw errors(400, 'Aula não encontrada no sistema!');
+
+    const trailUpdateExists = await knex('cursos').whereILike('nome', data.nome).andWhere("id", "!=", curso_id).first();
+    if (trailUpdateExists) throw errors(409, 'Aula já cadastrada no sistema!');
+
+    const updateTrails = await knex('cursos').update('nome', data.nome)
+        .where('id', curso_id).returning("*")
+    return updateTrails
+};
+
+
+
 module.exports = {
     create,
     findAll,
+    update
 };

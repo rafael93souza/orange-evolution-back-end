@@ -9,13 +9,14 @@ const create = async (id, data) => {
 
     const classesExists = await knex('todos_cursos').where('curso_id', id).andWhereILike('titulo', data.titulo)
         .andWhereILike('tipo', data.tipo).andWhereILike('criador', data.criador)
-        .andWhereILike('url', data.url).first().debug();
+        .andWhereILike('url', data.url).first();
 
     if (classesExists) throw errors(409, 'Aula já cadastrada no sistema!');
     data.curso_id = id;
     const createdClasses = await knex('todos_cursos').insert(data).returning('*');
     return createdClasses;
 };
+
 
 const detailClasses = async (id, curso_id) => {
     if (!Number(curso_id)) throw errors(400, 'Informe um código da trilha válido');
@@ -36,9 +37,11 @@ const detailClasses = async (id, curso_id) => {
     return classes;
 };
 
+
 const findAll = async () => {
     return await knex('todos_cursos');;
 };
+
 
 const remove = async (curso_id, aula_id) => {
     if (!Number(curso_id) || !Number(aula_id)) throw errors(400, 'Informe o código da trilha e da aula válido');
@@ -52,6 +55,7 @@ const remove = async (curso_id, aula_id) => {
     return true
 };
 
+
 const update = async (curso_id, aula_id, data) => {
     if (!Number(curso_id) || !Number(aula_id)) throw errors(400, 'Informe o código da trilha e da aula válido');
 
@@ -60,7 +64,7 @@ const update = async (curso_id, aula_id, data) => {
 
     const classesUpdateExists = await knex('todos_cursos').where("id", "!=", classesExists.id)
         .andWhere('curso_id', curso_id).andWhereILike('titulo', data.titulo).andWhereILike('tipo', data.tipo)
-        .andWhereILike('criador', data.criador).andWhereILike('url', data.url).first().debug();
+        .andWhereILike('criador', data.criador).andWhereILike('url', data.url).first();
 
     if (classesUpdateExists) throw errors(409, 'Aula já cadastrada no sistema!');
 
