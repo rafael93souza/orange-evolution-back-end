@@ -22,7 +22,9 @@ Construida uma RESTful API que permite:
 - Cadastrar novos cursos na plataforma
 - Cadastrar novas aulas para um curso na plataforma
 - Editar uma aula cadastrada na plataforma
+- Editar um curso cadastrado na plataforma
 - Excluir uma aula cadastrada na plataforma
+- Excluir um curso cadastrado na plataforma
 - Listar todos alunos cadastrados na plataforma
 - Listar todas as aulas cadastradas na plataforma
 
@@ -405,9 +407,82 @@ Essa é a rota que será utilizada para cadastrar um novo curso na plataforma.
 	"message": "Trilha já cadastrada no sistema!"
 }
 ```
-
 ---
 
+### **Atualizar um curso cadastrado no sistema**
+
+#### `PUT` `/trails/:curso_id`
+
+Essa é a rota que permite o admnistrador edite um curso ja cadastrada no sistema.
+
+- **Requisição**  
+    Com parâmetro de rota que deve conter o id do curso especifico que o administrador deseja atualizar
+    O corpo (body) deverá possuir um objeto com as seguintes propriedades (respeitando estes nomes):
+  - nome* 
+
+(*) Requisitos Obrigatórios
+
+#### **Exemplo de requisição**
+
+```javascript
+// PUT/trails/5
+{
+	"nome":"Back-end"
+}
+```
+
+#### **Exemplos de resposta**
+
+```javascript
+// HTTP Status 200
+{
+	"nome":"Back-end"
+}
+```
+
+```javascript
+// HTTP Status 400
+{
+	"message": "Curso já cadastrado no sistema!"
+}
+```
+---
+
+
+### **Deletar um curso do sistema**
+
+#### `DELETE` `/trails/:curso_id`
+
+Essa é a rota que permite o admnistrador exclua um curso cadastrado no sistema.
+(Essa rotá irá excluir todos os registros de aulas e status que tiverem relação com esse curso, por isso cuidado ao utilizar essa rota )
+
+- **Requisição**  
+    Com parâmetro de rota que deve conter o id do curso especifico que o administrador deseja excluir
+       Sem propriedade no corpo (body) da requisição 
+
+
+#### **Exemplo de requisição**
+
+```javascript
+// DELETE/trails/5
+// Sem propriedade no corpo (body) da requisição 
+
+```
+
+#### **Exemplos de resposta**
+
+```javascript
+// HTTP Status 204
+// Sem retorno conteúdo no retorno da requisição
+```
+
+```javascript
+// HTTP Status 400
+{
+	"message": "Curso não encontrado no sistema!"
+}
+```
+---
 ### **Cadastrar uma nova Aula no sistema**
 
 #### `POST` `/classes/:curso_id`
@@ -462,6 +537,98 @@ Essa é a rota que permite o admnistrador cadastre uma nova aula para um curso e
 	"message": "Aula já cadastrada no sistema!"
 }
 ```
+---
+
+### **Atualizar uma aula cadastrada no sistema**
+
+#### `PUT` `/classes/:curso_id/:aula_id`
+
+Essa é a rota que permite o admnistrador edite uma aula ja cadastrada no sistema.
+
+- **Requisição**  
+    Com parâmetro de rota que deve conter o id do curso /e o id da aula especifica que o administrador deseja atualizar
+    O corpo (body) deverá possuir um objeto com as seguintes propriedades (respeitando estes nomes):
+  - titulo* 
+  - tipo*
+  - criador* (quem produziu o conteúdo Obrigatório)
+  - duracao
+
+(*) Requisitos Obrigatórios
+
+#### **Exemplo de requisição**
+
+```javascript
+// PUT/classes/1/9
+{
+	"titulo":"Habilidades além do código!",
+	"tipo":"vídeo",
+	"criador": "Orange Juice",
+	"url":"https://www.youtube.com/watch?v=Mmukepu3yRs",
+	"duracao": "00:45:01"
+}
+```
+
+#### **Exemplos de resposta**
+
+```javascript
+// HTTP Status 200
+[
+	{
+		"id": 9,
+		"titulo": "Habilidades além do código!",
+		"tipo": "vídeo",
+		"criador": "Orange Juice",
+		"duracao": "00:45:01",
+		"url": "https://www.youtube.com/watch?v=Mmukepu3yRs",
+		"curso_id": 1,
+		"status": "Não iniciado"
+	}
+]
+```
+
+```javascript
+// HTTP Status 400
+{
+	"message": "Aula não encontrada no sistema!"
+}
+```
+---
+
+### **Deletar uma aula do curso do sistema**
+
+#### `DELETE` `/trails/:curso_id/:aula_id`
+
+Essa é a rota que permite o admnistrador exclua uma aula ja cadastrada no sistema.
+(Essa rotá irá excluir todos os registros de status que tiverem relação com essa aula, por isso cuidado ao utilizar essa rota )
+
+- **Requisição**  
+    Com parâmetro de rota que deve conter o id do curso e o id da aula especifica que o administrador deseja excluir
+       Sem propriedade no corpo (body) da requisição 
+
+
+#### **Exemplo de requisição**
+
+```javascript
+// DELETE/trails/5/1
+// Sem propriedade no corpo (body) da requisição 
+
+```
+
+#### **Exemplos de resposta**
+
+```javascript
+// HTTP Status 204
+// Sem retorno conteúdo no retorno da requisição
+```
+
+```javascript
+// HTTP Status 400
+{
+	"message": "Aula não encontrada no sistema!"
+}
+```
+
+---
 ### **Detalhar todos os cursos**
 
 #### `GET` `/trails`
