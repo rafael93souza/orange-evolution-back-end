@@ -29,6 +29,8 @@ router.get('/classes/:curso_id', ClassesController.detailClasses);
 router.get("/status/:usuario_id", StatusClassesController.detailStatusClasses);
 router.post("/status/:usuario_id",
     validationSchema(schemaRegisterStatusClasses), StatusClassesController.create);
+router.post('/trails/choose', UseController.createTrailsUser);
+router.get('/trails/choose', UseController.detailAllTrailsUser);
 
 
 router.use(authMiddlewareAdmin);
