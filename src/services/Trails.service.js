@@ -15,7 +15,6 @@ const findAll = async () => {
     return trails;
 };
 
-
 const update = async (curso_id, data) => {
     if (!Number(curso_id)) throw errors(400, 'Informe o código da trilha válido');
 

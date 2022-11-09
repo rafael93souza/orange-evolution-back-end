@@ -207,6 +207,104 @@ Essa é a rota que será chamada quando o usuario quiser obter todos os cursos c
     "message": "Para acessar este recurso um token de autenticação válido deve ser enviado."
 }
 ```
+
+---
+### **Escolher os cursos no sistema**
+
+#### `POST` `/trails/choose`
+
+Essa é a rota que será chamada quando o usuario quiser ingressar em um curso ou mais.
+
+- **Requisição**  
+    Sem parâmetros de rota ou de query.  
+   - **Requisição**  
+    O corpo (body) deverá possuir um objeto com as seguintes propriedades (respeitando estes nomes):
+
+  - cursos
+
+  Que deverá ser um array, contendo os id dos cursos dos quais o usuário escolheu.
+
+#### **Exemplo de requisição**
+
+```javascript
+// POST /trails/choose
+{
+    "cursos": [1,3]
+}
+```
+
+#### **Exemplos de resposta**
+
+```javascript
+// HTTP Status 200 
+[
+   {
+	"id": 9,
+	"usuario_id": 4,
+	"curso_id": 2
+   },
+   {
+	"id": 10,
+	"usuario_id": 4,
+	"curso_id": 3
+   }
+]
+```
+
+```javascript
+// HTTP Status 400
+{
+	"message": "Algum curso não foi encontrado no sistema!"
+}
+```
+---
+### **Detalhar os cursos escolhidos pelo Usuário**
+
+#### `GET` `/trails/choose`
+
+Essa é a rota que será chamada quando o usuario quiser obter as suas trilhas escolhidas.
+
+- **Requisição**  
+    Sem parâmetros de rota ou de query.  
+   - **Requisição**  
+    O corpo (body) sem nenhuma propriedade
+
+#### **Exemplo de requisição**
+
+```javascript
+// GET /trails/choose
+// Sem conteúdo no corpo (body) da requisição
+```
+
+#### **Exemplos de resposta**
+
+```javascript
+// HTTP Status 200 
+[
+   {
+	"id": 8,
+	"usuario_id": 4,
+	"curso_id": 1
+   },
+   {
+	"id": 9,
+	"usuario_id": 4,
+	"curso_id": 2
+   },
+   {
+	"id": 10,
+	"usuario_id": 4,
+	"curso_id": 3
+   }
+]
+```
+
+```javascript
+// HTTP Status 400
+{
+    "message": "Usuário não autenticado"
+}
+```
 ---
 ### **Detalhar Aulas de um Curso**
 
