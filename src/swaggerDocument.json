@@ -1,0 +1,1444 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "API da aplicação Orange Evolution",
+    "description": "API destinada a cadastro, listagem de aulas na área de tecnologia",
+    "contact": {
+      "url": "https://github.com/rafael93souza"
+    },
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3333"
+    }
+  ],
+  "paths": {
+    "/users": {
+      "post": {
+        "summary": "Cadastro de usuarios",
+        "description": "Essa rota é responsável por cadastrar um novo usuario na plataforma.",
+        "tags": ["Users"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Users"
+              },
+              "examples": {
+                "Users": {
+                  "value": {
+                    "nome": "José",
+                    "email": "jose@email.com",
+                    "senha": "123456"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/Json": {
+                "schema": {
+                  "$ref": "#components/schemas/Error"
+                },
+                "examples": {
+                  "Users": {
+                    "value": {
+                      "message": "Já existe usuário cadastrado com o e-mail informado."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/UsersResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "Busca todos os usuários. Admin",
+        "description": "Essa rota é responsável por trazer todos os usuário. Essa rota só pode ser acessada pelo adminitrador",
+        "tags": ["Users"],
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/Json": {
+                "schema": {
+                  "$ref": "#components/schemas/Error"
+                },
+                "examples": {
+                  "Users": {
+                    "value": {
+                      "message": "administrador não autorizado"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/UsersGet"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user": {
+      "get": {
+        "summary": "Busca dados usuario logado",
+        "description": "Essa rota é responsável por obter os dados do usuário logado.",
+        "tags": ["User"],
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/User"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/login": {
+      "post": {
+        "summary": "Login na aplicação",
+        "description": "Essa rota é responsável por permitir o usuario cadastrado realizar o login no sistema.",
+        "tags": ["Login"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Login"
+              },
+              "examples": {
+                "Login": {
+                  "value": {
+                    "email": "jose@email.com",
+                    "senha": "123456"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/Json": {
+                "schema": {
+                  "$ref": "#components/schemas/Error"
+                },
+                "examples": {
+                  "Login": {
+                    "value": {
+                      "message": "Usuário e/ou senha inválido(s)!"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/trails": {
+      "get": {
+        "summary": "Busca dos cursos",
+        "description": "Essa rota é responsável por obter todos os cursos cadastrados no sistema.",
+        "tags": ["Trails"],
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "400": {
+            "description": "Not found",
+            "content": {
+              "application/Json": {
+                "schema": {
+                  "$ref": "#components/schemas/Error"
+                },
+                "examples": {
+                  "Trails": {
+                    "value": {
+                      "message": "Para acessar este recurso um token de autenticação válido deve ser enviado."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Trails"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Cadastro de trilhas (cursos). Admin",
+        "description": "Essa rota é responsável por cadastrar um nova trilha (curso) na plataforma. Rota acessada somente por administrador",
+        "tags": ["Trails"],
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Trails"
+              },
+              "examples": {
+                "Trails": {
+                  "value": {
+                    "nome": "QA (Quality Assurance)",
+                    "subtitulo": "Lorem Ipsum is simply dummy text of the printing and typesetting...",
+                    "descricao": "Lorem Ipsum is simply dummy text of the printing and typesetting...",
+                    "urlimage": "https://www.localdaimagem.com/example.ext"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/Json": {
+                "schema": {
+                  "$ref": "#components/schemas/Error"
+                },
+                "examples": {
+                  "Trails": {
+                    "value": {
+                      "message": "Trilha já cadastrada no sistema!"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/Json": {
+                "schema": {
+                  "$ref": "#components/schemas/Error"
+                },
+                "examples": {
+                  "Trails": {
+                    "value": {
+                      "message": "administrador não autorizado"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/Trails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/trails/{curso_id}": {
+      "put": {
+        "summary": "Editar uma aula. Admin",
+        "description": "Editar uma aula pelo ID. Rota acessada somente por administrador",
+        "tags": ["Trails"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "curso_id",
+            "in": "path",
+            "description": "ID da aula",
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Trails"
+              },
+              "examples": {
+                "trails/{curso_id}": {
+                  "value": {
+                    "nome": "Back-end",
+                    "subtitulo": "Lorem Ipsum is simply dummy text of the printing and typesetting...",
+                    "descricao": "Lorem Ipsum is simply dummy text of the printing and typesetting...",
+                    "urlimage": "https://www.localdaimagem.com/example.ext"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "404": {
+            "description": "Conflict",
+            "content": {
+              "application/Json": {
+                "schema": {
+                  "$ref": "#components/schemas/Error"
+                },
+                "examples": {
+                  "trails/{curso_id}": {
+                    "value": {
+                      "message": "Curso não encontrado no sistema!"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/Json": {
+                "schema": {
+                  "$ref": "#components/schemas/Error"
+                },
+                "examples": {
+                  "trails/{curso_id}": {
+                    "value": {
+                      "message": "administrador não autorizado"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/Trails"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Remove uma aula. Admin",
+        "description": "Remove uma aula pelo ID. Rota acessada somente por administrador",
+        "tags": ["Trails"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "curso_id",
+            "in": "path",
+            "description": "ID da aula",
+            "required": true
+          }
+        ],
+        "responses": {
+          "404": {
+            "description": "Conflict",
+            "content": {
+              "application/Json": {
+                "schema": {
+                  "$ref": "#components/schemas/Error"
+                },
+                "examples": {
+                  "trails/{curso_id}": {
+                    "value": {
+                      "message": "Curso não encontrado no sistema!"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/Json": {
+                "schema": {
+                  "$ref": "#components/schemas/Error"
+                },
+                "examples": {
+                  "trails/{curso_id}": {
+                    "value": {
+                      "message": "administrador não autorizado"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "Not content",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/trails/choose": {
+      "post": {
+        "summary": "Criar a lista de curo(s) escolhido(s)",
+        "description": "Essa rota é responsável por o usuario ingressar em um curso ou mais",
+        "tags": ["TrailsChose"],
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "items": {
+                  "type": "number"
+                }
+              },
+              "examples": {
+                "trails/choose": {
+                  "value": {
+                    "cursos": [1, 2]
+                  }
+                }
+              }
+            }
+          }
+        },
+
+        "responses": {
+          "400": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#components/schemas/Error"
+                },
+                "examples": {
+                  "trails/choose": {
+                    "value": {
+                      "message": "Algum curso não foi encontrado no sistema!"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/Json": {
+                "schema": {
+                  "$ref": "#components/schemas/Error"
+                },
+                "examples": {
+                  "trails/choose": {
+                    "value": {
+                      "message": "Usuário não autenticado"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TrailsChosePOST"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "Busca curso(s) selecionado(s)",
+        "description": "Essa rota é responsável por trazer o(s) curso(s) selecionado(s) pelo usuário.",
+        "tags": ["TrailsChose"],
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/Json": {
+                "schema": {
+                  "$ref": "#components/schemas/Error"
+                },
+                "examples": {
+                  "trails/choose": {
+                    "value": {
+                      "message": "Usuário não autenticado"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TrailsChose"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/classes": {
+      "get": {
+        "summary": "Busca todos as aulas. Admin",
+        "description": "Essa rota é responsável por trazer todas as aulas cadatradas. Essa rota só pode ser acessada pelo adminitrador",
+        "tags": ["Classes"],
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/Json": {
+                "schema": {
+                  "$ref": "#components/schemas/Error"
+                },
+                "examples": {
+                  "Classes": {
+                    "value": {
+                      "message": "administrador não autorizado"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ClassesAdm"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/classes/{curso_id}": {
+      "get": {
+        "summary": "Busca aula pelo ID.",
+        "description": "Busca de uma aula pelo ID",
+        "tags": ["Classes"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "curso_id",
+            "in": "path",
+            "description": "ID da aula",
+            "required": true
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#components/schemas/Error"
+                },
+                "examples": {
+                  "classes/{curso_id}": {
+                    "value": {
+                      "message": "Curso não cadastrado no sistema."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/Json": {
+                "schema": {
+                  "$ref": "#components/schemas/Error"
+                },
+                "examples": {
+                  "classes/{curso_id}": {
+                    "value": {
+                      "message": "Usuário não autenticado"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#components/schemas/Classes"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Cadastro de aula. Admin",
+        "description": "Essa rota é responsável por cadastrar novas aulas na plataforma. Rota acessada somente por administrador",
+        "tags": ["Classes"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "curso_id",
+            "in": "path",
+            "description": "ID da curso",
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Classes"
+              },
+              "examples": {
+                "classes": {
+                  "value": {
+                    "titulo": "Habilidades além do código! | Com Mateus Oliveira",
+                    "tipo": "vídeo",
+                    "criador": "Orange Juice",
+                    "url": "https://www.youtube.com/watch?v=Mmukepu3yRs",
+                    "duracao": "00:45:01"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/Json": {
+                "schema": {
+                  "$ref": "#components/schemas/Error"
+                },
+                "examples": {
+                  "classes": {
+                    "value": {
+                      "message": "Trilha não cadastrada no sistema!"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/Json": {
+                "schema": {
+                  "$ref": "#components/schemas/Error"
+                },
+                "examples": {
+                  "classes": {
+                    "value": {
+                      "message": "Trilha já cadastrada no sistema!"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/Json": {
+                "schema": {
+                  "$ref": "#components/schemas/Error"
+                },
+                "examples": {
+                  "classes": {
+                    "value": {
+                      "message": "administrador não autorizado"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/Classes"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/status/{usuario_id}": {
+      "post": {
+        "description": "Aula pelo ID",
+        "summary": "Busca de uma aula pelo ID",
+        "tags": ["Status"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "usuario_id",
+            "in": "path",
+            "description": "ID do usuário",
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#components/schemas/Status"
+              },
+              "examples": {
+                "status": {
+                  "value": {
+                    "status": "concluido",
+                    "curso_id": 4,
+                    "aula_id": 1
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "400": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#components/schemas/Error"
+                },
+                "examples": {
+                  "status": {
+                    "value": {
+                      "message": "Curso não cadastrado no sistema."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/Json": {
+                "schema": {
+                  "$ref": "#components/schemas/Error"
+                },
+                "examples": {
+                  "status": {
+                    "value": {
+                      "message": "Usuário não autenticado"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/Json": {
+                "schema": {
+                  "$ref": "#components/schemas/Error"
+                },
+                "examples": {
+                  "status": {
+                    "value": {
+                      "message": "código do aluno inválido"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#components/schemas/Status"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "Busca dos status de um aluno",
+        "description": "Essa rota é responsável por obter todos os status das aulas do aluno logado",
+        "tags": ["Status"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "usuario_id",
+            "in": "path",
+            "description": "ID do usuário",
+            "required": true
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Not found",
+            "content": {
+              "application/Json": {
+                "schema": {
+                  "$ref": "#components/schemas/Error"
+                },
+                "examples": {
+                  "status": {
+                    "value": {
+                      "message": "Para acessar este recurso um token de autenticação válido deve ser enviado."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Status"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/status": {
+      "get": {
+        "summary": "Busca todos os status. Admin",
+        "description": "Essa rota é responsável por obter todos os status das aulas. Rota acessada pelo administrador",
+        "tags": ["Status"],
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/Json": {
+                "schema": {
+                  "$ref": "#components/schemas/Error"
+                },
+                "examples": {
+                  "Classes": {
+                    "value": {
+                      "message": "administrador não autorizado"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Status"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/classes/{curso_id}/{aula_id}": {
+      "put": {
+        "summary": "Editar uma aula. Admin",
+        "description": "Editar uma aula pelo ID. Rota acessada somente por administrador",
+        "tags": ["Classes"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "curso_id",
+            "in": "path",
+            "description": "ID do curso",
+            "required": true
+          },
+          {
+            "name": "aula_id",
+            "in": "path",
+            "description": "ID da aula",
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Classes"
+              },
+              "examples": {
+                "classes": {
+                  "value": {
+                    "titulo": "Back-end",
+                    "tipo": "Lorem Ipsum is simply dummy text of the printing and typesetting...",
+                    "criador": "Lorem Ipsum is simply dummy text of the printing and typesetting...",
+                    "url": "https://www.localdaimagem.com/example.ext",
+                    "duracao": "00:45:01"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "404": {
+            "description": "Conflict",
+            "content": {
+              "application/Json": {
+                "schema": {
+                  "$ref": "#components/schemas/Error"
+                },
+                "examples": {
+                  "classes": {
+                    "value": {
+                      "message": "Curso não encontrado no sistema!"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/Json": {
+                "schema": {
+                  "$ref": "#components/schemas/Error"
+                },
+                "examples": {
+                  "classes": {
+                    "value": {
+                      "message": "administrador não autorizado"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/Trails"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Remove uma aula. Admin",
+        "description": "Remove uma aula pelo ID. Rota acessada somente por administrador",
+        "tags": ["Classes"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "curso_id",
+            "in": "path",
+            "description": "ID da curso",
+            "required": true
+          },
+          {
+            "name": "aula_id",
+            "in": "path",
+            "description": "ID da aula",
+            "required": true
+          }
+        ],
+        "responses": {
+          "404": {
+            "description": "Conflict",
+            "content": {
+              "application/Json": {
+                "schema": {
+                  "$ref": "#components/schemas/Error"
+                },
+                "examples": {
+                  "classes": {
+                    "value": {
+                      "message": "Curso não encontrado no sistema!"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/Json": {
+                "schema": {
+                  "$ref": "#components/schemas/Error"
+                },
+                "examples": {
+                  "classes": {
+                    "value": {
+                      "message": "administrador não autorizado"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "Not content",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/admin": {
+      "post": {
+        "summary": "Cadastro de administrador",
+        "description": "Essa rota é responsável por cadastrar um novo novo administrador na plataforma. Rota acessada somente por administrador",
+        "tags": ["Admin"],
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Admin"
+              },
+              "examples": {
+                "Admin": {
+                  "value": {
+                    "nome": "John Doe",
+                    "email": "johndoe@email.com",
+                    "senha": "123456"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/Json": {
+                "schema": {
+                  "$ref": "#components/schemas/Error"
+                },
+                "examples": {
+                  "Admin": {
+                    "value": {
+                      "message": "E-mail já cadastrado no sistema!"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/Json": {
+                "schema": {
+                  "$ref": "#components/schemas/Error"
+                },
+                "examples": {
+                  "Admin": {
+                    "value": {
+                      "message": "administrador não autorizado"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/AdminResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "Busca todos os administradores. Rota acessada pelo admin",
+        "description": "Essa rota é responsável por trazer todos administradores cadatradas. Essa rota só pode ser acessada pelo adminitrador",
+        "tags": ["Admin"],
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/Json": {
+                "schema": {
+                  "$ref": "#components/schemas/Error"
+                },
+                "examples": {
+                  "Admin": {
+                    "value": {
+                      "message": "administrador não autorizado"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AdminResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+
+  "components": {
+    "schemas": {
+      "Users": {
+        "type": "object",
+        "properties": {
+          "nome": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "senha": {
+            "type": "string"
+          }
+        }
+      },
+      "UsersResponse": {
+        "type": "object",
+        "properties": {
+          "user": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "number"
+              },
+              "nome": {
+                "type": "string"
+              },
+              "email": {
+                "type": "string"
+              }
+            }
+          },
+          "token": {
+            "type": "string"
+          }
+        }
+      },
+      "UsersGet": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "nome": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          }
+        }
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "nome": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          }
+        }
+      },
+      "Login": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "senha": {
+            "type": "string"
+          }
+        }
+      },
+      "Trails": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "nome": {
+            "type": "string"
+          },
+          "subtitulo": {
+            "type": "string"
+          },
+          "descricao": {
+            "type": "string"
+          },
+          "urlimage": {
+            "type": "string"
+          }
+        }
+      },
+      "TrailsChose": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "usuario_id": {
+            "type": "number"
+          },
+          "curso_id": {
+            "type": "number"
+          }
+        }
+      },
+      "TrailsChosePOST": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "usuario_id": {
+            "type": "number"
+          },
+          "curso_id": {
+            "type": "number"
+          }
+        }
+      },
+      "Classes": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "titulo": {
+            "type": "string"
+          },
+          "tipo": {
+            "type": "string"
+          },
+          "criador": {
+            "type": "string"
+          },
+          "duração": {
+            "type": "string"
+          },
+          "utl": {
+            "type": "string"
+          },
+          "curso_id": {
+            "type": "number"
+          },
+          "status": {
+            "type": "string"
+          }
+        }
+      },
+      "ClassesAdm": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "titulo": {
+            "type": "string"
+          },
+          "tipo": {
+            "type": "string"
+          },
+          "criador": {
+            "type": "string"
+          },
+          "duração": {
+            "type": "string"
+          },
+          "utl": {
+            "type": "string"
+          },
+          "curso_id": {
+            "type": "number"
+          },
+          "status": {
+            "type": "string"
+          }
+        }
+      },
+      "Admin": {
+        "type": "object",
+        "properties": {
+          "nome": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "senha": {
+            "type": "string"
+          }
+        }
+      },
+      "AdminResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "nome": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          }
+        }
+      },
+      "Status": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "status": {
+            "type": "string"
+          },
+          "curso_id": {
+            "type": "number"
+          },
+          "aula_id": {
+            "type": "number"
+          }
+        }
+      },
+      "Error": {
+        "type": "object",
+        "required": ["message"],
+        "properties": {
+          "message": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}
