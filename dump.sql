@@ -116,7 +116,7 @@ VALUES (
         'Início',
         'A jornada começa aqui!',
         'O Orange Evolution consiste em trilhas totalmente gratuitas para que você possa iniciar a sua carreira na tecnologia. Você terá acesso a vídeos, lives, artigos, apostilas e até cursos gratuitos, além desses conteúdos serem da Orange Juice, de parceiros e empresas que confiamos.  Essa trilha foi montada pensando em quem está começando na área, ou passando por uma migração de carreira e ainda não sabe exatamente o que é esse mundo. Então, aperta o cinto e vem com a gente nessa jornada!',
-        'https://pics.freeicons.io/uploads/icons/png/1456453791535958155-512.png'
+        'https://f004.backblazeb2.com/file/orange-evolution/cursos/inicio-image.svg'
     );
 
 -- TABLE todas_aulas
