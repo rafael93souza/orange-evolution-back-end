@@ -1,6 +1,5 @@
 CREATE DATABASE orange_evolution;
 
-
 CREATE TABLE
     usuarios (
         id SERIAL PRIMARY KEY,
@@ -91,13 +90,39 @@ CREATE TABLE
         FOREIGN KEY (curso_id) REFERENCES cursos (id)
     );
 
-INSERT INTO cursos(nome)
-VALUES ('Full Stack'), ('Ux/Ui Designer'), ('QA (Quality Assurance)'), ('Início');
+INSERT INTO
+    cursos(
+        nome,
+        subtitulo,
+        descricao,
+        urlimage
+    )
+VALUES (
+        'Desenvolvimento Full Stack',
+        'Trilha para que ama um desafio lógico e construir coisa!',
+        'O Orange Evolution consiste em trilhas totalmente gratuitas para que você possa iniciar a sua carreira na tecnologia. Você terá acesso a vídeos, lives, artigos, apostilas e até cursos gratuitos, além desses conteúdos serem da Orange Juice, de parceiros e empresas que confiamos.  Essa trilha foi montada pensando em quem está começando na área, ou passando por uma migração de carreira e ainda não sabe exatamente o que é esse mundo. Então, aperta o cinto e vem com a gente nessa jornada!',
+        'https://orange-evolution.s3.us-west-004.backblazeb2.com/cursos/fullstack-image.svg'
+    ), (
+        'Ux/Ui Designer',
+        'Uma trilha para quem tem brilho, estilho e ama perfeição!',
+        'O Orange Evolution consiste em trilhas totalmente gratuitas para que você possa iniciar a sua carreira na tecnologia. Você terá acesso a vídeos, lives, artigos, apostilas e até cursos gratuitos, além desses conteúdos serem da Orange Juice, de parceiros e empresas que confiamos.  Essa trilha foi montada pensando em quem está começando na área, ou passando por uma migração de carreira e ainda não sabe exatamente o que é esse mundo. Então, aperta o cinto e vem com a gente nessa jornada!',
+        'https://orange-evolution.s3.us-west-004.backblazeb2.com/cursos/ux-ui-image.svg'
+    ), (
+        'QA (Quality Assurance)',
+        'Trilha deselvolvida para quem busca se tornar um pessao de qualidade!',
+        'O Orange Evolution consiste em trilhas totalmente gratuitas para que você possa iniciar a sua carreira na tecnologia. Você terá acesso a vídeos, lives, artigos, apostilas e até cursos gratuitos, além desses conteúdos serem da Orange Juice, de parceiros e empresas que confiamos.  Essa trilha foi montada pensando em quem está começando na área, ou passando por uma migração de carreira e ainda não sabe exatamente o que é esse mundo. Então, aperta o cinto e vem com a gente nessa jornada!',
+        'https://orange-evolution.s3.us-west-004.backblazeb2.com/cursos/qa-image.svg'
+    ), (
+        'Início',
+        'A jornada começa aqui!',
+        'O Orange Evolution consiste em trilhas totalmente gratuitas para que você possa iniciar a sua carreira na tecnologia. Você terá acesso a vídeos, lives, artigos, apostilas e até cursos gratuitos, além desses conteúdos serem da Orange Juice, de parceiros e empresas que confiamos.  Essa trilha foi montada pensando em quem está começando na área, ou passando por uma migração de carreira e ainda não sabe exatamente o que é esse mundo. Então, aperta o cinto e vem com a gente nessa jornada!',
+        'https://pics.freeicons.io/uploads/icons/png/1456453791535958155-512.png'
+    );
 
--- TABLE fullstack
+-- TABLE todas_aulas
 
 INSERT INTO
-    fullstack(
+    todas_aulas(
         titulo,
         tipo,
         criador,
@@ -280,20 +305,7 @@ VALUES (
         '00:10:00',
         'https://www.alura.com.br/artigos/metodos-de-requisicao-do-http',
         1
-    );
-
--- TABLE ux_ui_designer
-
-INSERT INTO
-    ux_ui_designer(
-        titulo,
-        tipo,
-        criador,
-        duracao,
-        url,
-        curso_id
-    )
-VALUES (
+    ), (
         'Design',
         'Vídeo',
         'UX Now',
@@ -503,20 +515,7 @@ VALUES (
         '00:31:00',
         'https://www.youtube.com/watch?v=9Bzd_PfKYLk&feature=youtu.be',
         2
-    );
-
--- TABLE qa
-
-INSERT INTO
-    qa(
-        titulo,
-        tipo,
-        criador,
-        duracao,
-        url,
-        curso_id
-    )
-VALUES (
+    ), (
         'Qualidade além dos bugs',
         'Live',
         'Orange Juice',
@@ -824,20 +823,7 @@ VALUES (
         '08:24:47',
         'https://jornadadodev.com.br/cursos/curso-completo-de-mysql?utm_source=facebook&utm_campaign=desenvolvimento_web&utm_medium=grupos&utm_content=curso-completo-de-mysql',
         3
-    );
-
--- TABLE inicio
-
-INSERT INTO
-    inicio(
-        titulo,
-        tipo,
-        criador,
-        duracao,
-        url,
-        curso_id
-    )
-VALUES (
+    ), (
         'Migração de Carreira',
         'Artigo',
         'Orange Juice',
