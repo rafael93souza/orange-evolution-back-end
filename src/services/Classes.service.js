@@ -2,6 +2,8 @@ const knex = require('../connections/database');
 const errors = require('../utils/errorsBase');
 
 const create = async (id, data) => {
+  console.log(data);
+  console.log(id);
   if (!Number(id)) throw errors(400, 'Informe um código da trilha válido');
 
   const trailsExists = await knex('cursos').where({ id }).first();
@@ -27,7 +29,6 @@ const detailClasses = async (id, curso_id) => {
   if (!trail) throw errors(400, 'Trilha não cadastrada no sistema!');
 
   const classesDetails = await knex('todas_aulas').where({ curso_id });
-  console.log(classesDetails);
   const statusClasses = await knex('status')
     .where({ curso_id })
     .andWhere({ usuario_id: id });
